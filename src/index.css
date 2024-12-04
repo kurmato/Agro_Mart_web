@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;    
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+.google-translate-container{
+    min-width: 100px;
+    text-align: center;
+    
+}
+
+.google-translate-container img{
+    display: none;
+}
+
+.google-translate-container span{
+    color: green;
+}
