@@ -7,6 +7,8 @@ import AboutUs from "./components/page/AboutUs";
 import Register from "./components/page/ Register";
 import Login from "./components/page/Login";
 import Auction from "./components/page/Auction";
+import UserDetail from "./components/page/UserDetail";
+import EmailVerify from "./components/page/EmailVerify";
 
 function App() {
   return (
@@ -25,7 +27,8 @@ function App() {
           <Route path="/Register" element={<Register />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/auction" element={<Auction />} />
-
+          <Route path="/UserDetail" element={<UserDetail />} />
+          <Route path="/EmailVerify" element={<EmailVerify />} />
         </Routes>
       </div>
     </Router>
