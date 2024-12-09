@@ -1,1 +1,1 @@
-export const baseUrl = "https://9e1e-2401-4900-1cd6-23a6-ade5-88a-2fbb-a9f1.ngrok-free.app";
+export const baseUrl = "https://agromart-back.avstechnology.co.in";

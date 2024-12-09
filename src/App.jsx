@@ -9,6 +9,7 @@ import Login from "./components/page/Login";
 import Auction from "./components/page/Auction";
 import UserDetail from "./components/page/UserDetail";
 import EmailVerify from "./components/page/EmailVerify";
+import CustomerForm from "./components/page/CustomerForm";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/auction" element={<Auction />} />
           <Route path="/UserDetail" element={<UserDetail />} />
           <Route path="/EmailVerify" element={<EmailVerify />} />
+          <Route path="/CustomerForm" element={<CustomerForm />} />
         </Routes>
       </div>
     </Router>
