@@ -1,51 +1,89 @@
-import React from 'react';
-import { heroContent } from '../content/heroContent';
-import { FaMicrophone } from "react-icons/fa";
-// Import search icon from react-icons
+// 
 
-function HeroSection() {
-  return (
-    <div
-      className="relative bg-cover bg-center flex items-center justify-center text-center w-full h-screen"
-      style={{
-        backgroundImage: `url(${heroContent.backgroundImage})`,
-      }}
-    >
-      {/* Search Box and Category Dropdown */}
-      <div className="absolute top-8 w-full flex justify-center px-4">
-        <div className="flex items-center bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-3xl">
-          {/* Dropdown */}
-          <select className="bg-gray-100 text-gray-700 px-4 py-2 border-r outline-none">
-            <option value="all">Categories</option>
-            <option value="electronics">Electronics</option>
-            <option value="fashion">Fashion</option>
-            <option value="home">Home</option>
-            <option value="books">Books</option>
-          </select>
+import React, { useEffect, useState } from "react";
+import Slider from "react-slick";
+import axios from "axios";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { baseUrl } from "../../BaseUrl";
 
-          {/* Search Box */}
-          <div className="flex-grow flex items-center px-4 p-2  bg-green-500">
-            <input
-              type="text"
-              className="w-full py-2 text-center outline-none bg-green-500 placeholder-white"
-              placeholder="Search products.."
-            />
-            <FaMicrophone className="text-white w-6 h-6 ml-2 cursor-pointer" />
-          </div>
+const PrevArrow = ({ onClick }) => (
+    <button className="Prev-icon" onClick={onClick}>
+        <FaChevronLeft />
+    </button>
+);
 
+const NextArrow = ({ onClick }) => (
+    <button className="Next-icon" onClick={onClick}>
+        <FaChevronRight />
+    </button>
+);
+
+const Carousel = () => {
+    const [banners, setBanners] = useState([]);
+
+    useEffect(() => {
+        const fetchBanners = async () => {
+          const token = localStorage.getItem("access_token")
+            try {
+                const response = await axios.get(`${baseUrl}/admin/getAllBanners`,
+                  {
+                    headers: {
+                      "ngrok-skip-browser-warning": "69420",
+                      Authorization: `Bearer ${token}`,
+                    }
+                  }
+                );
+                console.log("API Response:", response.data);  
+               
+                setBanners(Array.isArray(response.data) ? response.data : response.data.banners || []);
+            } catch (error) {
+                console.error("Error fetching banners:", error);
+            }
+        };
+        fetchBanners();
+    }, []);
+
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 800,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 3000,
+        pauseOnHover: false,
+        
+    };
+
+    return (
+        <div className="relative w-full">
+            <div className="overflow-hidden">
+                {banners.length > 0 ? (
+                    <Slider {...settings}>
+                        {banners.map((banner) => (
+                            <div key={banner.banner_id} className="relative">
+                                <img
+                                    src={banner.banner_image}
+                                    alt={banner.title}
+                                    className="w-full object-cover"
+                                />
+                                <div className="absolute inset-0 bg-black bg-opacity-30 flex flex-col justify-end p-6">
+                                    <h2 className="text-white text-xl font-bold">{banner.title}</h2>
+                                    <p className="text-white text-sm mt-2">{banner.description}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </Slider>
+                ) : (
+                    <div className="text-center py-10">
+                        <p>Loading banners...</p>
+                    </div>
+                )}
+            </div>
         </div>
-      </div>
+    );
+};
 
-      {/* Hero Content */}
-      <div className="text-white max-w-4xl px-2 text-left">
-        <h1 className="text-6xl font-bold">{heroContent.title}</h1>
-        <button className="mt-6 bg-green-500 text-white font-bold px-8 py-3 rounded hover:bg-green-600 shadow-md shadow-black ">
-  {heroContent.buttonText}
-</button>
-
-      </div>
-    </div>
-  );
-}
-
-export default HeroSection;
+export default Carousel;

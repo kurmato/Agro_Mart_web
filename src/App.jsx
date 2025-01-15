@@ -6,10 +6,14 @@ import MandiPlace from "./components/page/MandiPlace";
 import AboutUs from "./components/page/AboutUs";
 import Register from "./components/page/ Register";
 import Login from "./components/page/Login";
-import Auction from "./components/page/Auction";
+ 
 import UserDetail from "./components/page/UserDetail";
 import EmailVerify from "./components/page/EmailVerify";
 import CustomerForm from "./components/page/CustomerForm";
+import Auction from "./components/page/auction/Auction";
+import MyAuction from "./components/page/myAuction/MyAuction";
+import MyBidding from "./components/page/bidding/MyBidding";
+import Profile from "./components/page/myAuction/Profile";
 
 function App() {
   return (
@@ -28,6 +32,9 @@ function App() {
           <Route path="/Register" element={<Register />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/auction" element={<Auction />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/myBidding" element={<MyBidding />} />
+          <Route path="/myAuction" element={<MyAuction />} />
           <Route path="/UserDetail" element={<UserDetail />} />
           <Route path="/EmailVerify" element={<EmailVerify />} />
           <Route path="/CustomerForm" element={<CustomerForm />} />

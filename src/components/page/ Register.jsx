@@ -11,39 +11,15 @@ function Register() {
   const navigate = useNavigate();
   const [isOtpFieldVisible, setIsOtpFieldVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSendOtp = async () => {
+ 
+    setError("");
+
+    
     if (mobileNumber.length !== 10 || isNaN(mobileNumber)) {
-      alert("Please enter a valid 10-digit mobile number.");
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-        const response = await axios.post(
-            `${baseUrl}/customers/send-otp`,
-            { phoneNumber: mobileNumber },
-            { headers: { "Content-Type": "application/json" } }
-        );
-      if (response.status === 200 || response.status === 201) {
-        alert("OTP sent successfully!");
-        console.log("Response:", response.data);
-        setIsOtpFieldVisible(true);
-      } else {
-        alert("Failed to send OTP. Please try again.");
-      }
-    } catch (error) {
-      console.error("Error sending OTP:", error);
-      alert("An error occurred. Please try again later.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleVerifyOtp = async () => {
-    if (otp.length !== 6 || isNaN(otp)) {
-      alert("Please enter a valid 6-digit OTP.");
+      setError("Please enter a valid 10-digit mobile number.");
       return;
     }
 
@@ -51,22 +27,64 @@ function Register() {
 
     try {
       const response = await axios.post(
-        `${baseUrl}/customers/verify-otp/1`,
-        { otp },
+        `${baseUrl}/customers/send-otp`,
+        { phoneNumber: mobileNumber },
         { headers: { "Content-Type": "application/json" } }
       );
 
       if (response.status === 200 || response.status === 201) {
-        alert("OTP Verified Successfully!");
-        const tokens = response.data.customer.token;
-        localStorage.setItem('token',tokens)
-        navigate("/EmailVerify")
+        const customerId = response.data.customer_id;
+        localStorage.setItem("customerId", customerId);
+        setError("");
+        setIsOtpFieldVisible(true);
       } else {
-        alert("Invalid OTP. Please try again.");
+        setError("Failed to send OTP. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+      setError(
+        error.response?.data?.message ||
+          "An error occurred. Please try again later."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    setError("");
+
+    if (otp.length !== 6 || isNaN(otp)) {
+      setError("Please enter a valid 6-digit OTP.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const customerId = localStorage.getItem("customerId");
+      const response = await axios.post(
+        `${baseUrl}/customers/verify-otp/${customerId}`,
+        {
+          phoneNumber: mobileNumber,
+          otp,
+        },
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        const { token } = response.data;
+        localStorage.setItem("token", token);
+        navigate("/EmailVerify");
+      } else {
+        setError("Invalid OTP. Please try again.");
       }
     } catch (error) {
       console.error("Error verifying OTP:", error);
-      alert("An error occurred. Please try again later.");
+      setError(
+        error.response?.data?.message ||
+          "An error occurred. Please try again later."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -98,9 +116,17 @@ function Register() {
                   placeholder="Enter Mobile Number"
                   value={mobileNumber}
                   onChange={(e) => setMobileNumber(e.target.value)}
+                  disabled={isOtpFieldVisible}
                 />
               </div>
             </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="mb-4 text-red-500 text-sm text-center">
+                {error}
+              </div>
+            )}
 
             {/* Send OTP Button */}
             {!isOtpFieldVisible && (

@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 function MandiPlace() {
   const navigate = useNavigate();
+  
 
   return (
     <div>
@@ -19,7 +20,7 @@ function MandiPlace() {
       <main className="bg-gray-100">
         {/* Place Banner Section */}
         <div
-          className="relative w-full h-96 bg-cover bg-center"
+          className="relative w-full max-h-[300px] h-96 bg-cover bg-center"
           style={{ backgroundImage: `url(${PlaceBanner})` }}
         >
        
@@ -28,61 +29,65 @@ function MandiPlace() {
        
         
         {/* Cards Section */}
-        <div className="flex justify-around w-full absolute -top-[100px] flex-wrap">
-          {/* Card 1 */}
-          <div
-            className="relative w-[310px] h-[328px] bg-white shadow-md rounded-tl-[36px] rounded-tr-none rounded-br-none rounded-bl-none border-2 min-w-[500px]"
-            
-          >
-            <div
-              className="w-full h-full bg-cover bg-center rounded-tl-[36px]"
-              style={{ backgroundImage: `url(${Auction})` }}
-            ></div>
-            <div className="p-4 text-center">
-              <button className="mt-4 bg-blue-400 text-white px-4 py-2 rounded"  onClick={() => navigate("/auction")}>Auction</button>
-              <p className="text-base text-black  mt-2">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-              </p>
-            </div>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-6">
+  {/* Card 1 */}
+  <div
+    className="relative bg-white shadow-md rounded-tl-[36px] border-2 w-full h-auto max-w-sm mx-auto"
+  >
+    <div
+      className="w-full h-[300px] bg-cover bg-center rounded-tl-[36px] object-cover"
+      style={{ backgroundImage: `url(${Auction})` }}
+    ></div>
+    <div className="p-4 text-center shadow-lg">
+      <button
+        className="mt-4 bg-[#325885] hover:bg-[#1a5aa8] text-white px-4 py-2 rounded"
+        onClick={() => navigate("/auction")}
+      >
+        Auction
+      </button>
+      <p className="text-base text-black mt-2">
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+      </p>
+    </div>
+  </div>
 
-          {/* Card 2 */}
-          <div
-            className="relative w-[310px] h-auto bg-white shadow-md rounded-tl-[36px] rounded-tr-none rounded-br-none rounded-bl-none border-2 min-w-[500px]"
-            
-          >
-            <div
-              className="w-full h-full bg-cover bg-center rounded-tl-[36px]"
-              style={{ backgroundImage: `url(${Bhandar})` }}
-            ></div>
-            <div className="p-4 text-center">
-              <button className="mt-4 bg-blue-400 text-white px-4 py-2 rounded">Kendriya Bhandar</button>
-              <p className="text-base text-black mt-2">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-              </p>
-            </div>
-           
-          </div>
+  {/* Card 2 */}
+  <div
+    className="relative bg-white shadow-md rounded-tl-[36px] border-2 w-full h-auto max-w-sm mx-auto"
+  >
+    <div
+      className="w-full h-[300px] bg-cover bg-center rounded-tl-[36px] object-cover"
+      style={{ backgroundImage: `url(${Bhandar})` }}
+    ></div>
+    <div className="p-4 text-center">
+      <button className="mt-4 bg-[#325885] hover:bg-[#1a5aa8] text-white px-4 py-2 rounded">
+        Kendriya Bhandar
+      </button>
+      <p className="text-base text-black mt-2">
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+      </p>
+    </div>
+  </div>
 
-          {/* Card 3 */}
-          <div
-            className="relative w-[310px] h-auto bg-white shadow-md rounded-tl-[36px] rounded-tr-none rounded-br-none rounded-bl-none border-2 min-w-[500px]"
-           
-          >
-            <div
-              className="w-full h-full bg-cover bg-center rounded-tl-[36px]"
-              style={{ backgroundImage: `url(${ABCD})` }}
-            ></div>
-             <div className="p-4 text-center">
-              <button className="mt-4 bg-blue-400 text-white px-4 py-2 rounded">ABCD</button>
-              <p className="text-base text-black mt-2">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-              </p>
-            </div>
-          </div>
-  
-        </div>
-       
+  {/* Card 3 */}
+  <div
+    className="relative bg-white shadow-md rounded-tl-[36px] border-2 w-full h-auto max-w-sm mx-auto"
+  >
+    <div
+      className="w-full h-[300px] bg-cover bg-center rounded-tl-[36px] object-cover"
+      style={{ backgroundImage: `url(${ABCD})` }}
+    ></div>
+    <div className="p-4 text-center">
+      <button className="mt-4 bg-[#325885] hover:bg-[#1a5aa8] text-white px-4 py-2 rounded">
+        ABCD
+      </button>
+      <p className="text-base text-black mt-2">
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+      </p>
+    </div>
+  </div>
+</div>
+
         </div>
       </main>
 

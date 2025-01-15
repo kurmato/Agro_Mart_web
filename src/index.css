@@ -21,3 +21,36 @@
 .google-translate-container span{
     color: green;
 }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.navbar {
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+  transition: opacity 1s ease-in-out;
+}
+
+.navbar.visible {
+  opacity: 1;
+}
+
+@keyframes scale-a-lil {
+  from {
+    scale: .5;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  figure img {
+    animation: scale-a-lil linear both;
+    animation-timeline: view();
+    animation-range: 25vh 75vh;
+  }
+}
