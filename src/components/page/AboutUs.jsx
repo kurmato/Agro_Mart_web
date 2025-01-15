@@ -19,7 +19,7 @@ function AboutUs() {
           </section>
 
           {/* Our Story Section */}
-          <section className="py-16 px-8">
+          <section className="py-16 px-6   flex justify-center">
               <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   <div>
                       <h2 className="text-2xl font-bold text-gray-800 mb-4">Our Story</h2>
@@ -33,10 +33,12 @@ function AboutUs() {
                           with us leaves a lasting impression.
                       </p>
                   </div>
+                  <div className="flex justify-center">
                   <img
                       src={Auction}
                       alt="Our Story"
-                      className="rounded-lg shadow-lg" />
+                      className="rounded-lg shadow-lg  max-w-[300px] w-full h-full max-h-[300px]" />
+                  </div>
               </div>
           </section>
 

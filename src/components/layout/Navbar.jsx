@@ -1,43 +1,41 @@
 import React, { useEffect, useState } from "react";
 import Logo from "../../../src/assets/images/Logo.png";
 import { Link, useNavigate } from "react-router-dom";
-
-
+import { RxCross2 } from "react-icons/rx";
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAuctionOpen, setIsAuctionOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const userToken = localStorage.getItem("access_token");
+    if (userToken) setIsLoggedIn(true);
+  }, []);
 
-  const handleMandi = () => {
-    navigate("/MandiPrice")
-  }
-  const handleMandiPlace = () => {
-    navigate("/MandiPlace")
-  }
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleAuction = () => setIsAuctionOpen(!isAuctionOpen);
 
-  const handleAboutUs = () => {
-    navigate("/AboutUs")
-  }
-  const handleRegister = () => {
-    navigate("/Register")
-  }
-  const handleLogin = () => {
-    navigate("/Login")
-  }
+  const navLinks = [
+    { name: "HOME", link: "/" },
+    { name: "MANDI PRICE", link: "/MandiPrice" },
+    { name: "MARKET PLACE", link: "/MandiPlace" },
+    { name: "ABOUT US", link: "/AboutUs" },
+    { name: "REGISTER", link: "/Register" },
+    { name: "LOGIN", link: "/Login" },
+  ];
 
   useEffect(() => {
     const addGoogleTranslateScript = () => {
       const script = document.createElement("script");
-      // script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
       script.async = true;
       document.body.appendChild(script);
 
       window.googleTranslateElementInit = () => {
-        console.log("Google Translate initialized");
         new window.google.translate.TranslateElement(
           {
             pageLanguage: "en",
-            includedLanguages: "en,hi,bn,ta,te,gu,mr,kn,ml,pa,ur,as,or,ma,sa,sd,bo,ne,ka",
+            includedLanguages: "en,hi,bn,ta,te,gu,mr,kn,ml,pa",
             layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
           },
           "google_translate_element"
@@ -48,188 +46,104 @@ function Navbar() {
     addGoogleTranslateScript();
   }, []);
 
-
-
-
   return (
     <header className="bg-white shadow sticky top-0 z-50">
-      <div className="container mx-auto flex items-center justify-between">
-        {/* Logo */}
+      <div className="container mx-auto flex items-center justify-between p-2">
         <Link to="/">
-          <img src={Logo} alt="Logo" className="h-36 w-auto cursor-pointer" />
+          <img src={Logo} alt="Logo" className="h-[100px] w-auto cursor-pointer" />
         </Link>
 
-        {/* Mobile Menu Toggle */}
-        <button
-          className="block lg:hidden text-gray-700"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3.75 6.75h16.5m-16.5 5.25h16.5m-16.5 5.25h16.5"
-            />
-          </svg>
+        <button className="lg:hidden text-gray-700" onClick={toggleMenu}>
+          
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 6.75h16.5m-16.5 5.25h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+          
         </button>
 
-        {/* Navbar Links */}
-        <nav
-          className={`${isMenuOpen ? "block" : "hidden"
-            } lg:flex gap-8 items-center`}
-        >
-          {/* Home Link */}
-          <div className="relative group">
-            <button className="text-black hover:text-green-500 font-medium flex items-center gap-2">
-              HOME
-            </button>
-          </div>
+        <div className="hidden lg:flex gap-8">
+          {navLinks.slice(0, 4).map((link) => (
+            <Link
+              key={link.name}
+              to={link.link}
+              className="text-gray-500 hover:text-green-500 font-medium text-lg"
+            >
+              {link.name}
+            </Link>
+          ))}
+        </div>
 
-          {/* Mandi Price Dropdown */}
-          <div className="relative group">
-            <button className="text-gray-500 hover:text-green-500 font-medium flex items-center gap-2" onClick={handleMandi}>
-              MANDI PRICE
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M19.5 9l-7.5 7.5L4.5 9"
-                />
-              </svg>
+        {isLoggedIn && (
+          <div className="relative hidden lg:block">
+            <button
+              onClick={toggleAuction}
+              className="bg-[#24604e] text-white px-6 py-2 rounded-lg shadow"
+            >
+              AUCTION
             </button>
-            {/* <div className="absolute hidden group-hover:block bg-white shadow-md rounded mt-2 w-40">
-              <a
-                href="/mandiprice"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-              >
-                Price 1
-              </a>
-              <a
-                href="#price2"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-              >
-                Price 2
-              </a>
-              <a
-                href="#price3"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-              >
-                Price 3
-              </a>
-            </div> */}
+            {isAuctionOpen && (
+              <div className="absolute right-0 w-48 bg-white shadow-lg mt-2 rounded-lg">
+                <Link to="/myBidding" className="block px-4 py-2 hover:bg-gray-100">
+                  Bidding
+                </Link>
+                <Link to="/myAuction" className="block px-4 py-2 hover:bg-gray-100">
+                  My Auction
+                </Link>
+                <Link to="/profile" className="block px-4 py-2 hover:bg-gray-100">Profile</Link>
+              </div>
+            )}
           </div>
+        )}
 
-          {/* Other Links */}
-          <div className="relative group">
-            <button className="text-gray-500 hover:text-green-500 font-medium flex items-center gap-2" onClick={handleMandiPlace}>
-              MARKET PLACE
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M19.5 9l-7.5 7.5L4.5 9"
-                />
-              </svg>
-            </button>
-            {/* <div className="absolute hidden group-hover:block bg-white shadow-md rounded mt-2 w-40">
-              <a
-                href="#price1"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-              >
-                Price 1
-              </a>
-              <a
-                href="#price2"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-              >
-                Price 2
-              </a>
-              <a
-                href="#price3"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-              >
-                Price 3
-              </a>
-            </div> */}
-          </div>
-          <div className="relative group">
-            <button className="text-gray-500 hover:text-green-500 font-medium flex items-center gap-2" onClick={handleAboutUs} >
-              ABOUT US
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M19.5 9l-7.5 7.5L4.5 9"
-                />
-              </svg>
-            </button>
-            {/* <div className="absolute hidden group-hover:block bg-white shadow-md rounded mt-2 w-40">
-              <a
-                href="/AboutUs"
-                className="block px-4 py-2 text-gray-500 hover:bg-gray-100"
-              >
-                Price 1
-              </a>
-              <a
-                href="#price2"
-                className="block px-4 py-2 text-gray-500 hover:bg-gray-100"
-              >
-                Price 2
-              </a>
-              <a
-                href="#price3"
-                className="block px-4 py-2 text-gray-500 hover:bg-gray-100"
-              >
-                Price 3
-              </a>
-            </div> */}
-          </div>
-        </nav>
-
-        {/* Buttons and Language Selector */}
-        <div className="hidden lg:flex items-center gap-4 ">
-          {/* Register Button */}
-          <button className="text-black bg-green-500 border border-green-500  px-8 py-2 rounded-lg shadow-[0px_-4px_6px_rgba(0,0,0,0.5)]" onClick={handleRegister}>
+        <div className="hidden lg:flex items-center gap-4">
+          <button
+            className="text-white bg-[#1a6636] px-8 hover:bg-green-700   py-2 rounded-lg"
+            onClick={() => navigate("/Register")}
+          >
             REGISTER
           </button>
-
-          {/* Login Button */}
-          <button className="bg-[#0DAFF0] text-black px-10 py-2 rounded-lg shadow-[0px_-4px_6px_rgba(0,0,0,0.5)]" onClick={handleLogin}>
+          <button
+            className="bg-[#2a5584] text-white hover:bg-blue-900 px-10 py-2 rounded-lg"
+            onClick={() => navigate("/Login")}
+          >
             LOGIN
           </button>
-          <div className="text-green-700 bg-white border border-green-700 rounded ">
-            <div id="google_translate_element" className="bg-white border border-green-700 rounded google-translate-container"  ></div>
+          <div className="border border-green-700 rounded">
+            <div id="google_translate_element" className="google-translate-container"></div>
           </div>
         </div>
       </div>
+
+      {isMenuOpen && (
+        <div className="lg:hidden fixed inset-0 bg-green-50 z-40">
+          <div onClick={toggleMenu} className="flex justify-end right-4 p-6">
+          <RxCross2 />
+          </div>
+          <div className="flex flex-col items-start gap-6 p-8">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.link}
+                className="text-gray-500 hover:text-green-500 hover:bg-slate-200 w-full p-2 text-lg"
+                onClick={toggleMenu}
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </header>
   );
 }

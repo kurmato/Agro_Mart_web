@@ -5,7 +5,9 @@ import Footer from "../layout/Footer";
 import { baseUrl } from "../../BaseUrl";
 import { useNavigate } from "react-router-dom";
 
-function EmailVerify() {
+
+
+const VerifyLoginOtp = () => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
@@ -13,20 +15,17 @@ function EmailVerify() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleAddEmail = async () => {
-    if (!email || !/\S+@\S+\.\S+/.test(email)) {
-      alert("Please enter a valid email address.");
-      return;
-    }
+     
   
     setIsLoading(true);
   
- 
+  
     const token = localStorage.getItem("token");
   
     try {
       const response = await axios.post(
-        `${baseUrl}/customers/addEmail`,
-        { email },
+        `${baseUrl}/customers/verifyCustomerPin`,
+        { phoneNumber },
         {
           headers: {
             "Content-Type": "application/json",
@@ -50,7 +49,7 @@ function EmailVerify() {
   };
   
 
-  
+ 
   const handleVerifyOtp = async () => {
     if (!otp || otp.length !== 6) {
       alert("Please enter a valid 6-digit OTP.");
@@ -63,7 +62,7 @@ function EmailVerify() {
     try {
       const response = await axios.post(
         `${baseUrl}/customers/verifyEmailOTP`,
-        { otp },  
+        { otp }, 
         {
           headers: {
             "Content-Type": "application/json",
@@ -95,18 +94,18 @@ function EmailVerify() {
         <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-sm">
           <h1 className="text-2xl font-bold text-center mb-6">Verify Email</h1>
           <form onSubmit={(e) => e.preventDefault()}>
-        
+            {/* Email Input */}
             {!isEmailSent && (
               <div className="mb-4">
                 <label
-                  htmlFor="email"
+                  htmlFor=" Phone Number"
                   className="block text-gray-700 font-semibold mb-2"
                 >
-                  Email Address*
+                 Phone Number
                 </label>
                 <input
-                  type="email"
-                  id="email"
+                  type=" Phone Number"
+                  id=" Phone Number"
                   className="w-full bg-gray-100 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none"
                   placeholder="Enter your email"
                   value={email}
@@ -158,4 +157,4 @@ function EmailVerify() {
   );
 }
 
-export default EmailVerify;
+export default VerifyLoginOtp

@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
 import { baseUrl } from "../../BaseUrl";
 import axios from "axios";
+import {   useNavigate } from "react-router-dom";
 
 const CustomerForm = () => {
+  const navigate =useNavigate()
+  const [userRole, setUserRole] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
     panNumber: "",
     aadharCard: "",
     address: "",
@@ -18,30 +21,42 @@ const CustomerForm = () => {
     ifscCode: "",
     bankAccountNumber: "",
     preferredProducts: [],
+    gst: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
+
+   
+  const productOptions = [
+    "Cereals", "Pulses", "Spices", "Nuts", "Vegetables", 
+    "Fruits", "Processed Foods", "Others", "Grains", "Sapling", "Oils"
+  ];
+
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    setUserRole(role);
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
-    setFormData((prev) => {
-      const updatedProducts = checked
+    setFormData((prev) => ({
+      ...prev,
+      preferredProducts: checked
         ? [...prev.preferredProducts, value]
-        : prev.preferredProducts.filter((product) => product !== value);
-      return { ...prev, preferredProducts: updatedProducts };
-    });
+        : prev.preferredProducts.filter((product) => product !== value),
+    }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
     setIsLoading(true);
-
+  
     const apiUrl = `${baseUrl}/customers/completeProfileDetails`;
-
+  
     try {
       const response = await axios.put(apiUrl, formData, {
         headers: {
@@ -49,9 +64,13 @@ const CustomerForm = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-
+  
       if (response.status === 200 || response.status === 201) {
         alert("Profile completed successfully!");
+        
+        localStorage.removeItem('role');
+        localStorage.removeItem('customerId');
+        navigate("/Login");
       } else {
         alert("Something went wrong. Please try again.");
       }
@@ -62,163 +81,173 @@ const CustomerForm = () => {
       setIsLoading(false);
     }
   };
+  
+  const renderInputField = (name, label, type = "text", required = false) => {
+    return (
+      <div>
+        <label className="block text-sm font-medium">{label}</label>
+        <input
+          type={type}
+          name={name}
+          value={formData[name]}
+          onChange={handleInputChange}
+          className="w-full border p-2 rounded"
+          required={required}
+        />
+      </div>
+    );
+  };
 
-  const productOptions = [
-    "Cereals",
-    "Pulses",
-    "Spices",
-    "Nuts",
-    "Vegetables",
-    "Fruits",
-    "Processed Foods",
-    "Others",
-    "Grains",
-    "Sapling",
-    "Oils",
-  ];
-
-  return (
-    <><Navbar />
-          <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#2bcf41] to-[#b3f4bf]">
-
-    <form
-          className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-md space-y-4"
-          onSubmit={handleSubmit}
-      >
-          <h2 className="text-2xl font-bold mb-4">Customer Form</h2>
-
-          {/* Email, PAN, Aadhar */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                  <label className="block text-sm font-medium">Email ID</label>
-                  <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full border p-2 rounded"
-                      required />
-              </div>
-              <div>
-                  <label className="block text-sm font-medium">PAN Number</label>
-                  <input
-                      type="text"
-                      name="panNumber"
-                      value={formData.panNumber}
-                      onChange={handleInputChange}
-                      className="w-full border p-2 rounded" />
-              </div>
-              <div>
-                  <label className="block text-sm font-medium">Aadhar Card</label>
-                  <input
-                      type="text"
-                      name="aadharCard"
-                      value={formData.aadharCard}
-                      onChange={handleInputChange}
-                      className="w-full border p-2 rounded" />
-              </div>
-          </div>
-
-          {/* Address Details */}
-          <div>
+  const renderFormFields = () => {
+    switch (userRole) {
+      case "Farmer":
+      case "Individual Trader":
+        return (
+          <>
+            {renderInputField("aadharCard", "Aadhar Card", "text", true)}
+            {renderInputField("panNumber", "PAN Number", "text", true)}
+            
+            <div>
               <label className="block text-sm font-medium">Address</label>
               <textarea
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  className="w-full border p-2 rounded"
-                  rows="3" />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                  <label className="block text-sm font-medium">District</label>
-                  <input
-                      type="text"
-                      name="district"
-                      value={formData.district}
-                      onChange={handleInputChange}
-                      className="w-full border p-2 rounded" />
-              </div>
-              <div>
-                  <label className="block text-sm font-medium">Taluka</label>
-                  <input
-                      type="text"
-                      name="taluka"
-                      value={formData.taluka}
-                      onChange={handleInputChange}
-                      className="w-full border p-2 rounded" />
-              </div>
-              <div>
-                  <label className="block text-sm font-medium">Pin Code</label>
-                  <input
-                      type="text"
-                      name="pinCode"
-                      value={formData.pinCode}
-                      onChange={handleInputChange}
-                      className="w-full border p-2 rounded"
-                      required />
-              </div>
-          </div>
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
+                className="w-full border p-2 rounded"
+                rows="3"
+                required
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {renderInputField("district", "District", "text", true)}
+              {renderInputField("taluka", "Taluka", "text", true)}
+              {renderInputField("pinCode", "Pin Code", "text", true)}
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {renderInputField("bankName", "Bank Name", "text", true)}
+              {renderInputField("bankBranch", "Bank Branch", "text", true)}
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {renderInputField("ifscCode", "IFSC Code", "text", true)}
+              {renderInputField("bankAccountNumber", "Bank Account Number", "text", true)}
+            </div>
+          </>
+        );
+      
+      case "Company":
+        return (
+          <>
+            {renderInputField("gst", "GST Number", "text", true)}
+            {renderInputField("aadharCard", "Aadhar Card", "text", true)}
+            {renderInputField("panNumber", "PAN Number", "text", true)}
+            
+            <div>
+              <label className="block text-sm font-medium">Address</label>
+              <textarea
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
+                className="w-full border p-2 rounded"
+                rows="3"
+                required
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {renderInputField("district", "District", "text", true)}
+              {renderInputField("taluka", "Taluka", "text", true)}
+              {renderInputField("pinCode", "Pin Code", "text", true)}
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {renderInputField("bankName", "Bank Name", "text", true)}
+              {renderInputField("bankBranch", "Bank Branch", "text", true)}
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {renderInputField("ifscCode", "IFSC Code", "text", true)}
+              {renderInputField("bankAccountNumber", "Bank Account Number", "text", true)}
+            </div>
+          </>
+        );
+      
+      case "Retailer":
+        return (
+          <>
+            {renderInputField("gst", "GST Number", "text", true)}
+            {renderInputField("panNumber", "PAN Number", "text", true)}
+            
+            <div>
+              <label className="block text-sm font-medium">Address</label>
+              <textarea
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
+                className="w-full border p-2 rounded"
+                rows="3"
+                required
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {renderInputField("district", "District", "text", true)}
+              {renderInputField("taluka", "Taluka", "text", true)}
+              {renderInputField("pinCode", "Pin Code", "text", true)}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {renderInputField("bankName", "Bank Name", "text", true)}
+              {renderInputField("bankBranch", "Bank Branch", "text", true)}
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {renderInputField("ifscCode", "IFSC Code", "text", true)}
+              {renderInputField("bankAccountNumber", "Bank Account Number", "text", true)}
+            </div>
+          </>
+        );
+      
+      default:
+        return <div>No form fields available for this role</div>;
+    }
+  };
 
-          {/* Bank Details */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                  <label className="block text-sm font-medium">Bank Name</label>
-                  <input
-                      type="text"
-                      name="bankName"
-                      value={formData.bankName}
-                      onChange={handleInputChange}
-                      className="w-full border p-2 rounded" />
-              </div>
-              <div>
-                  <label className="block text-sm font-medium">Bank Branch</label>
-                  <input
-                      type="text"
-                      name="bankBranch"
-                      value={formData.bankBranch}
-                      onChange={handleInputChange}
-                      className="w-full border p-2 rounded" />
-              </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                  <label className="block text-sm font-medium">IFSC Code</label>
-                  <input
-                      type="text"
-                      name="ifscCode"
-                      value={formData.ifscCode}
-                      onChange={handleInputChange}
-                      className="w-full border p-2 rounded" />
-              </div>
-              <div>
-                  <label className="block text-sm font-medium">Bank Account Number</label>
-                  <input
-                      type="text"
-                      name="bankAccountNumber"
-                      value={formData.bankAccountNumber}
-                      onChange={handleInputChange}
-                      className="w-full border p-2 rounded" />
-              </div>
-          </div>
+  // Render nothing if no role is set
+  if (!userRole) {
+    return null;
+  }
 
-          {/* Preferred Products */}
+  return (
+    <>
+      <Navbar />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#2bcf41] to-[#b3f4bf]">
+        <form
+          className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-md space-y-4"
+          onSubmit={handleSubmit}
+        >
+          <h2 className="text-2xl font-bold mb-4">{userRole} Profile</h2>
+
+          {renderFormFields()}
+
+          {/* Preferred Products Section */}
           <div>
-              <label className="block text-sm font-medium mb-2">
-                  Preferred Product(s)
-              </label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                  {productOptions.map((product) => (
-                      <label key={product} className="flex items-center">
-                          <input
-                              type="checkbox"
-                              value={product}
-                              onChange={handleCheckboxChange}
-                              className="mr-2" />
-                          {product}
-                      </label>
-                  ))}
-              </div>
+            <label className="block text-sm font-medium mb-2">Preferred Product(s)</label>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {productOptions.map((product) => (
+                <label key={product} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    value={product}
+                    onChange={handleCheckboxChange}
+                    checked={formData.preferredProducts.includes(product)}
+                    className="mr-2"
+                  />
+                  {product}
+                </label>
+              ))}
+            </div>
           </div>
 
           <button
@@ -228,10 +257,10 @@ const CustomerForm = () => {
           >
             {isLoading ? "Loading..." : "Complete Profile"}
           </button>
-      </form>
-   </div>
-      <Footer/>
-      </>
+        </form>
+      </div>
+      <Footer />
+    </>
   );
 };
 
