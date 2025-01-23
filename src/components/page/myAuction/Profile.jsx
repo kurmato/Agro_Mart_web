@@ -30,24 +30,27 @@ const Profile = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [customerId, setCustomerId] = useState(null); // Added customer ID state
+  const [customerId, setCustomerId] = useState(null);
 
   useEffect(() => {
     const fetchProfileData = async () => {
       const token = localStorage.getItem("access_token");
       try {
         setLoading(true);
-        const response = await axios.get(`${baseUrl}/customers/getProfileDetailsCustomer`, {
-          headers: {
-            "Content-Type": "application/json",
-            "ngrok-skip-browser-warning": "69420",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${baseUrl}/customers/getProfileDetailsCustomer`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "ngrok-skip-browser-warning": "69420",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (response.status === 200) {
           setProfileData(response.data.customer);
-          setCustomerId(response.data.customer.customer_id); 
-          console.log(response.data.customer.customer_id,"response.data.customer_id908766578uik") 
+          setCustomerId(response.data.customer.customer_id);
+          console.log("Customer ID:", response.data.customer.customer_id);
         } else {
           setError("Failed to fetch profile data. Please check the API route.");
         }
@@ -67,35 +70,7 @@ const Profile = () => {
     setProfileData({ ...profileData, [name]: value });
   };
 
-  const handleSubmit = async () => {
-    if (!customerId) {
-      alert("Customer ID not available.");
-      return;
-    }
-
-    const token = localStorage.getItem("access_token");
-    try {
-      const response = await axios.post(
-        `${baseUrl}/customers/updateProfileDetailsCustomer/${customerId}`,  
-        profileData, 
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "ngrok-skip-browser-warning": "69420",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.status === 200) {
-        alert("Profile updated successfully!");
-      } else {
-        alert("Failed to update profile. Please try again.");
-      }
-    } catch (err) {
-      console.error("Error updating profile:", err.message);
-      alert("Failed to update profile.");
-    }
-  };
+   
 
   if (loading) {
     return <div className="text-center py-4">Loading...</div>;
@@ -108,16 +83,21 @@ const Profile = () => {
   return (
     <>
       <Navbar />
-      <div className="flex justify-center items-center py-10">
-        <div className="container mx-auto p-6 bg-white border-2 rounded-xl shadow-xl">
-          <div className="flex justify-center pb-8">
+      <div className="bg-green-50 min-h-screen">
+      <div className="flex justify-center items-center py-10 px-4">
+        <div className="container mx-auto p-6 bg-white border-2 max-w-5xl rounded-xl shadow-xl">
+          <div className="flex justify-center items-center pb-8">
             <Picture />
           </div>
-          <h2 className="text-2xl font-bold text-center mb-6">Profile Details</h2>
+          <h2 className="text-2xl font-bold text-center mb-6">
+            Profile Details
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {Object.keys(profileData).map((key) => (
               <div key={key}>
-                <label className="font-semibold capitalize">{key.replace(/_/g, " ")}:</label>
+                <label className="font-semibold capitalize">
+                  {key.replace(/_/g, " ")}:
+                </label>
                 <input
                   type="text"
                   name={key}
@@ -134,11 +114,10 @@ const Profile = () => {
                 Cancel
               </button>
             </Link>
-            <button className="bg-green-500 text-white p-2 rounded" onClick={handleSubmit}>
-              Update
-            </button>
+             
           </div>
         </div>
+      </div>
       </div>
       <Footer />
     </>

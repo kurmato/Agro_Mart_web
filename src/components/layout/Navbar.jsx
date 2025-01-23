@@ -26,6 +26,7 @@ function Navbar() {
   ];
 
   useEffect(() => {
+    const token = localStorage.getItem("access_token");
     const addGoogleTranslateScript = () => {
       const script = document.createElement("script");
       script.async = true;
@@ -36,8 +37,14 @@ function Navbar() {
           {
             pageLanguage: "en",
             includedLanguages: "en,hi,bn,ta,te,gu,mr,kn,ml,pa",
-            layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+            layout:
+              window.google.translate.TranslateElement.InlineLayout.SIMPLE,
           },
+
+          {
+            Authorization: `Bearer ${token}`,
+          },
+
           "google_translate_element"
         );
       };
@@ -50,26 +57,28 @@ function Navbar() {
     <header className="bg-white shadow sticky top-0 z-50">
       <div className="container mx-auto flex items-center justify-between p-2">
         <Link to="/">
-          <img src={Logo} alt="Logo" className="h-[100px] w-auto cursor-pointer" />
+          <img
+            src={Logo}
+            alt="Logo"
+            className="h-[70px] w-auto cursor-pointer"
+          />
         </Link>
 
         <button className="lg:hidden text-gray-700" onClick={toggleMenu}>
-          
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5m-16.5 5.25h16.5m-16.5 5.25h16.5"
-              />
-            </svg>
-          
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3.75 6.75h16.5m-16.5 5.25h16.5m-16.5 5.25h16.5"
+            />
+          </svg>
         </button>
 
         <div className="hidden lg:flex gap-8">
@@ -77,7 +86,7 @@ function Navbar() {
             <Link
               key={link.name}
               to={link.link}
-              className="text-gray-500 hover:text-green-500 font-medium text-lg"
+              className="text-gray-500 hover:text-[#1c6336] font-medium text-lg"
             >
               {link.name}
             </Link>
@@ -94,13 +103,24 @@ function Navbar() {
             </button>
             {isAuctionOpen && (
               <div className="absolute right-0 w-48 bg-white shadow-lg mt-2 rounded-lg">
-                <Link to="/myBidding" className="block px-4 py-2 hover:bg-gray-100">
+                <Link
+                  to="/myBidding"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                >
                   Bidding
                 </Link>
-                <Link to="/myAuction" className="block px-4 py-2 hover:bg-gray-100">
+                <Link
+                  to="/myAuction"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                >
                   My Auction
                 </Link>
-                <Link to="/profile" className="block px-4 py-2 hover:bg-gray-100">Profile</Link>
+                <Link
+                  to="/profile"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                >
+                  Profile
+                </Link>
               </div>
             )}
           </div>
@@ -120,16 +140,24 @@ function Navbar() {
             LOGIN
           </button>
           <div className="border border-green-700 rounded">
-            <div id="google_translate_element" className="google-translate-container"></div>
+            <div
+              id="google_translate_element"
+              className="google-translate-container"
+            ></div>
           </div>
         </div>
       </div>
 
       {isMenuOpen && (
-        <div className="lg:hidden fixed inset-0 bg-green-50 z-40">
-          <div onClick={toggleMenu} className="flex justify-end right-4 p-6">
-          <RxCross2 />
+        <div
+          className={`lg:hidden fixed inset-0 z-40 bg-green-50 transition-transform transform ${
+            isMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div onClick={toggleMenu} className="flex justify-end p-6">
+            <RxCross2 className="text-gray-700 w-6 h-6 cursor-pointer" />
           </div>
+
           <div className="flex flex-col items-start gap-6 p-8">
             {navLinks.map((link) => (
               <Link
@@ -141,6 +169,43 @@ function Navbar() {
                 {link.name}
               </Link>
             ))}
+
+       
+            {isLoggedIn && (
+              <div className="relative">
+                <button
+                  onClick={toggleAuction}
+                  className="text-gray-500 hover:text-green-500 hover:bg-slate-200 w-full text-lg"
+                >
+                  AUCTION
+                </button>
+                {isAuctionOpen && (
+                  <div className="absolute left-0 w-48 bg-white shadow-lg mt-2 rounded-lg">
+                    <Link
+                      to="/myBidding"
+                      className="block px-4 py-2 hover:bg-gray-100"
+                      onClick={toggleMenu}
+                    >
+                      Bidding
+                    </Link>
+                    <Link
+                      to="/myAuction"
+                      className="block px-4 py-2 hover:bg-gray-100"
+                      onClick={toggleMenu}
+                    >
+                      My Auction
+                    </Link>
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2 hover:bg-gray-100"
+                      onClick={toggleMenu}
+                    >
+                      Profile
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}

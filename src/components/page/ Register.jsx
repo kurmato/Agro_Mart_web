@@ -133,7 +133,7 @@ function Register() {
               <button
                 type="button"
                 onClick={handleSendOtp}
-                className="w-full bg-blue-500 text-white font-semibold py-2 rounded-lg hover:bg-blue-600 transition disabled:opacity-50"
+                className="w-full bg-[#2b456e] text-white font-semibold py-2 rounded-lg hover:bg-blue-600 transition disabled:opacity-50"
                 disabled={isLoading}
               >
                 {isLoading ? "Sending OTP..." : "Send OTP"}

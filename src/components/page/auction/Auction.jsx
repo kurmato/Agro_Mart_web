@@ -59,7 +59,7 @@ function Auction() {
       });
 
       setAuctions(filteredAuctions);
-      console.log(filteredAuctions, "filteredAuctions--------------");
+  
     } catch (err) {
       console.error("Error fetching auctions:", err.message);
     } finally {
@@ -79,14 +79,14 @@ function Auction() {
 
   const AuctionCard = ({ auction }) => (
     <div className="bg-white shadow-md rounded-lg overflow-hidden flex">
-      <div className="md:w-1/4">
+      <div className="    w-40 m-auto ">
         <img
           src={
             auction.customerAuction.images[0] ||
             `/api/placeholder/150?text=${auction.customerAuction.commodity_name}`
           }
           alt={auction.customerAuction.commodity_name}
-          className="object-cover w-full h-full"
+          className="object-contain aspect-16/9"
         />
       </div>
 
@@ -97,7 +97,7 @@ function Auction() {
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4 w-[80%] mt-2">
+        <div className="grid md:grid-cols-2 gap-4  w-[80%] mt-2">
           <div>
             <p className="text-sm text-gray-500">Highest Bid: NA</p>
           </div>
@@ -120,12 +120,12 @@ function Auction() {
           </div>
         </div>
 
-        <div className="absolute bottom-4 right-3">
+        <div className="absolute bottom-4  right-2">
           <button
             className={`px-4 py-2 text-sm rounded
               ${
                 selectedStatus === "CLOSED"
-                  ? "bg-gray-400 cursor-not-allowed"
+                  ? "bg-[#9e1010] cursor-not-allowed"
                   : "bg-[#1e6628] hover:bg-[#138222]"
               } text-white`}
             onClick={() => openModal(auction)}
@@ -138,85 +138,7 @@ function Auction() {
     </div>
   );
 
-  // const BidModal = ({ auction }) => (
-  //   <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-  //     <div className="bg-white w-full max-w-6xl p-6 rounded-lg shadow-lg px-32">
-  //       <h3 className="text-lg font-bold mb-4">Place Your Bid</h3>
-  //       <div className="space-y-2">
-  //         <div className="flex justify-between">
-  //           <p className="text-sm text-gray-700">
-  //             {auction.customerAuction.commodity_name} -{" "}
-  //             {auction.customerAuction.quantity}{" "}
-  //             {auction.customerAuction.quantity_unit}
-  //           </p>
-  //           <p className="text-sm text-gray-700">
-  //             Time Left: {getTimeRemaining(auction.time_slot_end)}
-  //           </p>
-  //         </div>
-
-  //         <div className="grid grid-cols-2">
-  //           <img
-  //             src={auction.customerAuction.images[0] || img}
-  //             alt={auction.customerAuction.commodity_name}
-  //             className="w-full h-auto"
-  //           />
-  //           <div className="grid md:grid-cols-2 gap-4 w-[80%] mt-2">
-  //             <div>
-  //               <p className="text-sm text-gray-500">
-  //                 Grade: {auction.customerAuction.grade}
-  //               </p>
-  //             </div>
-  //             <div>
-  //               <p className="text-sm text-gray-500">
-  //                 Start Price: {auction.customerAuction.base_price}{" "}
-  //                 {auction.customerAuction.currency}/
-  //                 {auction.customerAuction.base_price_unit}
-  //               </p>
-  //             </div>
-  //             <div>
-  //               <p className="text-sm text-gray-500">
-  //                 State: {auction.customerAuction.customer.state}
-  //               </p>
-  //             </div>
-  //             <div>
-  //               <p className="text-sm text-gray-500">Highest Bid: NA</p>
-  //             </div>
-  //           </div>
-  //         </div>
-
-  //         <div className="flex justify-center">
-  //           <input
-  //             type="number"
-  //             placeholder="Enter Bid Amount"
-  //             className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-400"
-  //           />
-  //         </div>
-  //       </div>
-
-  //       <div className="flex justify-center mt-4 space-x-2">
-  //         <button
-  //           className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-  //           onClick={closeModal}
-  //         >
-  //           Cancel
-  //         </button>
-  //         <button className="px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-500">
-  //           Submit Bid
-  //         </button>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
-
-  // const getTimeRemaining = (endTime) => {
-  //   const total = new Date(endTime) - new Date();
-  //   const days = Math.floor(total / (1000 * 60 * 60 * 24));
-  //   const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
-  //   const minutes = Math.floor((total / 1000 / 60) % 60);
-  //   const seconds = Math.floor((total / 1000) % 60);
-  //   return `${days} Day(s) ${hours} Hrs ${minutes} Min ${seconds} Sec`;
-  // };
-
+  
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -245,7 +167,7 @@ function Auction() {
           </button>
         </div>
 
-        <div className="md:w-3/4 p-2 mt-4">
+        <div className="md:w-3/4 p- mt-4">
           <div className="flex justify-between gap-6 mb-4 text-lg font-semibold">
             {["LIVE", "UPCOMING", "CLOSED"].map((status) => (
               <span

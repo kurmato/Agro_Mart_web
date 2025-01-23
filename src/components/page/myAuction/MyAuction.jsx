@@ -5,7 +5,7 @@ import Navbar from "../../layout/Navbar";
 import { baseUrl } from "../../../BaseUrl";
 import GetMyAuction from "./GetMyAuction";
 import Footer from "../../layout/Footer";
-
+import AuctionBanner from "../../../assets/images/AuctionBanner.png";
 const AuctionForm = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [formData, setFormData] = useState({
@@ -110,12 +110,22 @@ const AuctionForm = () => {
   return (
     <>
       <Navbar />
+      <div className="relative shadow text-center">
+        <div
+          className="relative w-full h-96 bg-cover bg-center flex items-center justify-center"
+          style={{
+            backgroundImage: `linear-gradient(180deg, rgba(13, 175, 240, 0.7) 0%, rgba(179, 213, 225, 0.5) 100%), url(${AuctionBanner})`,
+          }}
+        >
+          <h1 className="text-6xl font-bold   z-10">My Auctions</h1>
+        </div>
+      </div>
       <div className=" min-h-screen container mx-auto p-6 py-6">
         <button
           onClick={handleClick}
-          className="bg-blue-500 text-white p-2 rounded"
+          className="bg-[#2c4f87] text-white p-2 rounded"
         >
-          Auction
+          Add Auctions
         </button>
 
         <div className="max-h-screen">
@@ -129,7 +139,7 @@ const AuctionForm = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div>
                     <label>
-                      Commodity Name <span className="text-red-500">*</span>:
+                      Commodity Name <span className="text-[#913030]">*</span>:
                     </label>
                     <select
                       name="drop_down_value"
@@ -149,7 +159,7 @@ const AuctionForm = () => {
 
                   <div>
                     <label>
-                      Quantity <span className="text-red-500">*</span>:
+                      Quantity <span className="text-[#913030]">*</span>:
                     </label>
                     <input
                       type="number"
@@ -180,7 +190,7 @@ const AuctionForm = () => {
 
                   <div>
                     <label>
-                      Base Price <span className="text-red-500">*</span>:
+                      Base Price <span className="text-[#913030]">*</span>:
                     </label>
                     <input
                       type="number"
@@ -273,14 +283,14 @@ const AuctionForm = () => {
                 <div className="flex justify-between mt-4">
                   <button
                     type="submit"
-                    className="bg-green-500 text-white p-2 rounded"
+                    className="bg-[#225d38] text-white p-2 rounded"
                   >
                     Submit
                   </button>
                   <button
                     type="button"
                     onClick={handleClose}
-                    className="bg-red-500 text-white p-2 rounded"
+                    className="bg-[#8f3232] text-white p-2 rounded"
                   >
                     Cancel
                   </button>
