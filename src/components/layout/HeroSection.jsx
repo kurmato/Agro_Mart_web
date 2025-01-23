@@ -8,18 +8,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { baseUrl } from "../../BaseUrl";
 
-const PrevArrow = ({ onClick }) => (
-    <button className="Prev-icon" onClick={onClick}>
-        <FaChevronLeft />
-    </button>
-);
-
-const NextArrow = ({ onClick }) => (
-    <button className="Next-icon" onClick={onClick}>
-        <FaChevronRight />
-    </button>
-);
-
+ 
 const Carousel = () => {
     const [banners, setBanners] = useState([]);
 
@@ -46,7 +35,7 @@ const Carousel = () => {
     }, []);
 
     const settings = {
-        dots: true,
+         
         infinite: true,
         speed: 800,
         slidesToShow: 1,
@@ -58,21 +47,24 @@ const Carousel = () => {
     };
 
     return (
-        <div className="relative w-full">
+        <div className=" w-full">
+            <div className=" ">
             <div className="overflow-hidden">
                 {banners.length > 0 ? (
                     <Slider {...settings}>
                         {banners.map((banner) => (
-                            <div key={banner.banner_id} className="relative">
+                            <div key={banner.banner_id} className="relative h-3/2 ">
                                 <img
                                     src={banner.banner_image}
                                     alt={banner.title}
-                                    className="w-full object-cover"
+                                    className="w-full  h-2/3 lg:h-screen opacity-80 object-cover "
                                 />
-                                <div className="absolute inset-0 bg-black bg-opacity-30 flex flex-col justify-end p-6">
-                                    <h2 className="text-white text-xl font-bold">{banner.title}</h2>
-                                    <p className="text-white text-sm mt-2">{banner.description}</p>
+                               <div className="absolute inset-0 flex items-center container mx-auto   p-6">
+                               <div  >
+                                    <h2 className="text-white  text-2xl  ">{banner.title}</h2>
+                                    <p className="text-[#862c2c]  mt-2 md:w-[60%]  lg:text-5xl text-2xl font-bold">{banner.description}</p>
                                 </div>
+                               </div>
                             </div>
                         ))}
                     </Slider>
@@ -81,6 +73,7 @@ const Carousel = () => {
                         <p>Loading banners...</p>
                     </div>
                 )}
+            </div>
             </div>
         </div>
     );

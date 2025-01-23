@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { baseUrl } from '../../../BaseUrl';
+import React, { useState } from "react";
+import axios from "axios";
+import { baseUrl } from "../../../BaseUrl";
 
 const BidModal = ({ auction, setSelectedAuction }) => {
-  const [bidAmount, setBidAmount] = useState('');
+  const [bidAmount, setBidAmount] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const getTimeRemaining = (endTime) => {
@@ -25,25 +25,27 @@ const BidModal = ({ auction, setSelectedAuction }) => {
       setBidAmount(value);
     }
   };
-
+  const token = localStorage.getItem("access_token");
   const handleSubmit = async () => {
-    const token=localStorage.getItem("access_token")
-    const currentHighestBid = auction.customerAuction.highest_bid || auction.customerAuction.base_price;
+    const currentHighestBid =
+      auction.customerAuction.highest_bid || auction.customerAuction.base_price;
 
     if (!bidAmount || parseFloat(bidAmount) <= currentHighestBid) {
       alert(`Please enter a bid amount higher than ${currentHighestBid}.`);
       return;
     }
-   
+
     setIsSubmitting(true);
-console.log(auction.customer_auction_id,"auction.customer_auction_idiu09876657890o")
+    console.log(
+      auction.customer_auction_id,
+      "auction.customer_auction_idiu09876657890o"
+    );
     try {
       const response = await axios.post(
         `${baseUrl}/customers/makeABid/${auction.customer_auction_id}`,
         { bid_amount: parseFloat(bidAmount) },
         {
           headers: {
-             
             "ngrok-skip-browser-warning": "69420",
             Authorization: `Bearer ${token}`,
           },
@@ -52,55 +54,62 @@ console.log(auction.customer_auction_id,"auction.customer_auction_idiu0987665789
       alert(response.data.message);
       setSelectedAuction(null);
     } catch (error) {
-      alert('Failed to place the bid. Please try again.');
+      alert("Failed to place the bid. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white w-full max-w-6xl p-6 rounded-lg shadow-lg px-32">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center px-4 z-50">
+      <div className="bg-white w-full max-w-4xl p-6 rounded-lg shadow-lg  ">
         <h3 className="text-lg font-bold mb-4">Place Your Bid</h3>
         <div className="space-y-2">
-          <div className="flex justify-between">
+          <div className="flex justify-between gap-4">
             <p className="text-sm text-gray-700">
+            <span className="text-sm font-bold"> {auction.customerAuction.commodity_name} -</span> 
               {auction.customerAuction.commodity_name} -{" "}
               {auction.customerAuction.quantity}{" "}
               {auction.customerAuction.quantity_unit}
             </p>
             <p className="text-sm text-gray-700">
-              Time Left: {getTimeRemaining(auction.time_slot_end)}
+            <span className="text-sm text-red-600  font-bold"> Time Left : </span>    {getTimeRemaining(auction.time_slot_end)}
             </p>
           </div>
 
-          <div className="grid grid-cols-2">
-            <img
-              src={auction.customerAuction.images[0] || '/placeholder.png'}
-              alt={auction.customerAuction.commodity_name}
-              className="w-full h-auto"
-            />
-            <div className="grid md:grid-cols-2 gap-4 w-[80%] mt-2">
+          <div className="grid grid-cols-2 ">
+            <div className="">
+              <img
+                src={auction.customerAuction.images[0] || "/placeholder.png"}
+                alt={auction.customerAuction.commodity_name}
+                className="w-2/3 h-16/9 rounded-lg"
+              />
+            </div>
+            <div className="    w-full space-y-3">
               <div>
                 <p className="text-sm text-gray-500">
-                  Grade: {auction.customerAuction.grade}
+                  <span className="text-sm font-bold">Grade :</span>{" "}
+                  {auction.customerAuction.grade}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">
-                  Start Price: {auction.customerAuction.base_price}{" "}
+                <p className="text-sm text-gray-500 ">
+                  <span className="text-sm font-bold"> Start Price :</span>{" "}
+                  {auction.customerAuction.base_price}{" "}
                   {auction.customerAuction.currency}/
                   {auction.customerAuction.base_price_unit}
                 </p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">
-                  State: {auction.customerAuction.customer.state}
+                  <span className="text-sm font-bold"> State :</span>{" "}
+                  {auction.customerAuction.customer.state}
                 </p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">
-                  Highest Bid: {auction.customerAuction.highest_bid || 'NA'}
+                  <span className="text-sm font-bold"> Highest Bid :</span>{" "}
+                  {auction.customerAuction.highest_bid || "NA"}
                 </p>
               </div>
             </div>
@@ -112,8 +121,11 @@ console.log(auction.customer_auction_id,"auction.customer_auction_idiu0987665789
               value={bidAmount}
               onChange={handleBidChange}
               placeholder="Enter Bid Amount"
-              className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-400"
-              min={auction.customerAuction.highest_bid || auction.customerAuction.base_price + 1}
+              className="border border-gray-300 w-28 rounded px-1 py-1 focus:outline-none focus:ring focus:ring-blue-400"
+              min={
+                auction.customerAuction.highest_bid ||
+                auction.customerAuction.base_price + 1
+              }
             />
           </div>
         </div>
@@ -126,11 +138,13 @@ console.log(auction.customer_auction_id,"auction.customer_auction_idiu0987665789
             Cancel
           </button>
           <button
-            className={`px-4 py-2 text-white rounded ${isSubmitting ? 'bg-gray-400' : 'bg-blue-400 hover:bg-blue-500'}`}
+            className={`px-4 py-2 text-white rounded ${
+              isSubmitting ? "bg-gray-400" : "bg-[#2a5584]  hover:bg-blue-500"
+            }`}
             disabled={isSubmitting || !bidAmount}
             onClick={handleSubmit}
           >
-            {isSubmitting ? 'Submitting...' : 'Submit Bid'}
+            {isSubmitting ? "Submitting..." : "Submit Bid"}
           </button>
         </div>
       </div>

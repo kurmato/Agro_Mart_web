@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { baseUrl } from "../../../BaseUrl";
-
+import { FaRegEdit } from "react-icons/fa";
 const Picture = () => {
   const [profileImage, setProfileImage] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
+  const [image, setImage] = useState(null);
   const apiUrl = `${baseUrl}/customers/getProfilePicCustomer`;
   const uploadUrl = `${baseUrl}/customers/uploadProfilePicCustomer`;
 
   useEffect(() => {
     const fetchProfilePicture = async () => {
       const token = localStorage.getItem("access_token");
-      console.log("Base URL:", baseUrl);
-      console.log("Fetching profile picture from:", apiUrl);
-      
+      if (!token) {
+        console.error("Access token is missing.");
+        return;
+      }
+
       try {
         const response = await axios.get(apiUrl, {
           headers: {
@@ -21,8 +23,6 @@ const Picture = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("API Response:", response.data);
-        
         if (response.data?.profileImage) {
           setProfileImage(response.data.profileImage);
         } else {
@@ -39,32 +39,50 @@ const Picture = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setImageFile(file);
+      const validTypes = ["image/jpeg", "image/png", "image/gif"];
+      if (!validTypes.includes(file.type)) {
+        alert("Invalid file type. Please select an image file.");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        alert("File size exceeds the limit of 5MB.");
+        return;
+      }
+      setImage(file);
     }
   };
 
   const handleImageUpload = async () => {
     const token = localStorage.getItem("access_token");
-    if (!imageFile) {
+    if (!token) {
+      alert("User not authenticated. Please log in.");
+      return;
+    }
+    if (!image) {
       alert("Please select an image to upload.");
       return;
     }
 
     const formData = new FormData();
-    formData.append("profileImage", imageFile);
+    formData.append("image", image);
+
+    
 
     try {
       const response = await axios.post(uploadUrl, formData, {
         headers: {
           "ngrok-skip-browser-warning": "69420",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("Upload Response:", response.data);
-      
+
       if (response.data?.profileImage) {
         setProfileImage(response.data.profileImage);
+        console.log(response.data.profileImage,"98786556rfuehbyuegj")
         alert("Profile picture uploaded successfully!");
+      } else {
+        alert("Unexpected response format from server.");
       }
     } catch (error) {
       console.error("Error uploading profile picture:", error.response || error.message);
@@ -76,21 +94,25 @@ const Picture = () => {
     <div>
       <div>
         {profileImage ? (
-          <div className="border-2 rounded-full h-80 w-80">
+           <div className=" flex justify-center">
+            <div className="border-2 h-[50%] w-[50%] md:h-52 md:w-52 rounded-full">
             <img
               src={profileImage}
               alt="Profile"
-              className="rounded-full h-80 w-80 object-cover"
+              className="rounded-full w-full h-full object-cover"
             />
+         
           </div>
+           </div>
         ) : (
-          <div className="h-80 w-80 flex items-center justify-center bg-gray-200 rounded-full">
+          <div className="h-52 w-52 flex items-center justify-center bg-gray-200 rounded-full">
             <p>Loading...</p>
           </div>
         )}
       </div>
 
-      <input
+     <div className="md:flex justify-center">
+     <input
         type="file"
         accept="image/*"
         onChange={handleFileChange}
@@ -100,8 +122,9 @@ const Picture = () => {
         onClick={handleImageUpload}
         className="mt-2 p-2 bg-blue-500 text-white rounded"
       >
-        Upload Profile Picture
+        Upload Picture
       </button>
+     </div>
     </div>
   );
 };

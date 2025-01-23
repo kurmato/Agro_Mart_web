@@ -62,7 +62,7 @@ function AboutUs() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                       {/* Value 1 */}
                       <div className="bg-white shadow-md rounded-lg p-6 text-center">
-                          <h3 className="text-xl font-semibold text-blue-500 mb-2">
+                          <h3 className="text-xl font-semibold text-[#2b5497] mb-2">
                               Integrity
                           </h3>
                           <p className="text-gray-600">
@@ -72,7 +72,7 @@ function AboutUs() {
 
                       {/* Value 2 */}
                       <div className="bg-white shadow-md rounded-lg p-6 text-center">
-                          <h3 className="text-xl font-semibold text-blue-500 mb-2">
+                          <h3 className="text-xl font-semibold text-[#2b5497] mb-2">
                               Innovation
                           </h3>
                           <p className="text-gray-600">
@@ -82,7 +82,7 @@ function AboutUs() {
 
                       {/* Value 3 */}
                       <div className="bg-white shadow-md rounded-lg p-6 text-center">
-                          <h3 className="text-xl font-semibold text-blue-500 mb-2">
+                          <h3 className="text-xl font-semibold text-[#2b5497] mb-2">
                               Excellence
                           </h3>
                           <p className="text-gray-600">

@@ -115,7 +115,7 @@ function Login() {
                 <button
                   type="button"
                   onClick={handleCheckPhoneNumber}
-                  className="w-full mt-4 bg-green-500 text-white font-semibold py-2 rounded-lg hover:bg-green-600"
+                  className="w-full mt-4 bg-[#1b4b2c] text-white font-semibold py-2 rounded-lg hover:bg-green-600"
                   disabled={loading}
                 >
                   {loading ? "Checking..." : "Check Number"}
@@ -155,7 +155,7 @@ function Login() {
                 <button
                   type="button"
                   onClick={handleSubmitPin}
-                  className="w-full bg-green-500 text-white font-semibold py-2 mt-4 rounded-lg hover:bg-green-600 transition disabled:opacity-50"
+                  className="w-full bg-[#1b4b2c] text-white font-semibold py-2 mt-4 rounded-lg hover:bg-green-600 transition disabled:opacity-50"
                   disabled={loading}
                 >
                   {loading ? "Verifying..." : "Verify PIN"}

@@ -3,39 +3,33 @@ import  { useState, useEffect } from 'react';
 import axios from 'axios';
 import { baseUrl } from '../../../BaseUrl';
 import Navbar from '../../layout/Navbar';
-
+import AuctionBanner from "../../../assets/images/AuctionBanner.png";
 const MyBidding = () => {
     const [commodities, setCommodities] = useState([]);
 
-    // useEffect(() => {
-    //     const token = localStorage.getItem('access_token'); 
-
-    // if (token) {
-    //     const config = {
-    //         headers: {
-    //           "ngrok-skip-browser-warning": "69420",
-    //           Authorization: `Bearer ${token}`,
-    //         }
-    //       };
-    //   axios.get(`${baseUrl}/`,config)
-    //     .then((response) => {
-    //       setCommodities(response.data);
-    //     })
-    //     .catch((error) => {
-    //       console.error('Error fetching data:', error);
-    //     });
-    // }, []);
+ 
   return (
     <>
     <Navbar/>
-   <div className="container mx-auto mt-10">
-      <table className="w-full border-collapse border border-gray-300">
+     <div className="relative shadow text-center">
+            <div
+              className="relative w-full h-96 bg-cover bg-center flex items-center justify-center"
+              style={{
+                backgroundImage: `linear-gradient(180deg, rgba(13, 175, 240, 0.7) 0%, rgba(179, 213, 225, 0.5) 100%), url(${AuctionBanner})`,
+              }}
+            >
+              <h1 className="text-6xl font-bold   z-10">My Bids</h1>
+            </div>
+          </div>
+   <div className="container mx-auto mt-10  ">
+       <div className='overflow-x-auto'>
+       <table className="w-full     border-gray-300">
         <thead>
-          <tr className="bg-gray-200">
-            <th className="border border-gray-300 px-4 py-2">Commodity Name</th>
-            <th className="border border-gray-300 px-4 py-2">Auction Type</th>
-            <th className="border border-gray-300 px-4 py-2">Warehouse Name</th>
-            <th className="border border-gray-300 px-4 py-2">Actions</th>
+          <tr className="bg-gray-200  ">
+            <th className="border border-gray-300 text-sm px-4 py-2">Commodity Name</th>
+            <th className="border border-gray-300 text-sm px-4 py-2">Auction Type</th>
+            <th className="border border-gray-300 text-sm px-4 py-2">Warehouse Name</th>
+            <th className="border border-gray-300 text-sm px-4 py-2">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -53,6 +47,7 @@ const MyBidding = () => {
           ))}
         </tbody>
       </table>
+       </div>
     </div>
     </>
   )
