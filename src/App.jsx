@@ -14,6 +14,10 @@ import Auction from "./components/page/auction/Auction";
 import MyAuction from "./components/page/myAuction/MyAuction";
 import MyBidding from "./components/page/bidding/MyBidding";
 import Profile from "./components/page/myAuction/Profile";
+import TermsAndConditions from "./components/page/Terms&Conditions";
+import ShippingPolicy from "./components/page/Shipping";
+import PrivacyPolicy from "./components/page/Privacy";
+import Conditions from "./components/page/Condition";
 
 function App() {
   return (
@@ -38,6 +42,11 @@ function App() {
           <Route path="/UserDetail" element={<UserDetail />} />
           <Route path="/EmailVerify" element={<EmailVerify />} />
           <Route path="/CustomerForm" element={<CustomerForm />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/shipping-policy" element={<ShippingPolicy />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/conditions" element={<Conditions />} />
+
         </Routes>
       </div>
     </Router>
