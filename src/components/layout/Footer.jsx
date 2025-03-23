@@ -37,7 +37,7 @@ function Footer() {
               Support
             </div>
             <Link className="my-3 block" to="/shipping-policy">
-              Shipping <span className="text-teal-600 text-xs p-1"></span>
+              Shipping Policy<span className="text-teal-600 text-xs p-1"></span>
             </Link>
             <Link className="my-3 block" to="/privacy-policy">
               Privacy Policy <span className="text-teal-600 text-xs p-1"></span>
